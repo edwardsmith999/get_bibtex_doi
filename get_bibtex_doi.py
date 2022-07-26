@@ -1,7 +1,17 @@
 
 from habanero import Crossref
 from fuzzywuzzy import fuzz
-    
+import sys
+
+try:
+    if ".bib" in sys.argv[2]
+        fname = sys.argv[2]
+    else:
+        print("First argument should be bibtex file filename.bib and not", sys.argv[2])
+        quit()
+except IndexError:
+    print("Expected usage: \n python3 get_bibtex_doi.py filename.bib")
+
 cr = Crossref()
 
 #Create a new bibtex file which will have DOI in it
@@ -11,9 +21,9 @@ with open("extra_references_doi.bib", "w+") as g:
         for l in f:
             g.write(l)
             #For title entries, clean up syntax
-            if "title" in l:
+            if "title" in l.lower():
                 s = l.strip()
-                for r in ['title', '=', '"', ',', '{', '}', '\t', '\n' ]:
+                for r in ['title','Title', '=', '"', ',', '{', '}', '\t', '\n' ]:
                     s = s.replace(r,"")
                 print(s)
         

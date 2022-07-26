@@ -4,13 +4,14 @@ from fuzzywuzzy import fuzz
 import sys
 
 try:
-    if ".bib" in sys.argv[2]
-        fname = sys.argv[2]
+    if ".bib" in sys.argv[1]:
+        fname = sys.argv[1]
     else:
-        print("First argument should be bibtex file filename.bib and not", sys.argv[2])
-        quit()
+        print("First argument should be bibtex file filename.bib and not", sys.argv[1])
+        raise IndexError
 except IndexError:
     print("Expected usage: \n python3 get_bibtex_doi.py filename.bib")
+    quit()
 
 cr = Crossref()
 

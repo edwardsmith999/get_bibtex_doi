@@ -1,8 +1,13 @@
-
+#from scholarly import scholarly
+#search_query = scholarly.search_pubs(s)
+#scholarly.pprint(next(search_query))
+#pub = next(search_query)
+#scholarly.bibtex(pub)
 from habanero import Crossref
 from fuzzywuzzy import fuzz
 import sys
 
+print(sys.argv)
 try:
     if ".bib" in sys.argv[1]:
         fname = sys.argv[1]
@@ -16,8 +21,8 @@ except IndexError:
 cr = Crossref()
 
 #Create a new bibtex file which will have DOI in it
-with open("extra_references_doi.bib", "w+") as g:
-    with open("extra_references.bib", 'r') as f:
+with open("doi_"+fname, "w+") as g:
+    with open(fname, 'r') as f:
         #Go through bibtex file and make a copy
         for l in f:
             g.write(l)
@@ -29,7 +34,12 @@ with open("extra_references_doi.bib", "w+") as g:
                 print(s)
         
                 #Use crossref API to get DOI based on title
-                sr = cr.works(query_title = s)
+                try:
+                    sr = cr.works(query_title = s)
+                #Skip if failure to search
+                except requests.exceptions.HTTPError: 
+                    print("HTTP ERROR - CANNOT FIND INFO, SKIPPING", s)
+                    continue
                 results = sr['message']['items']
 
                 #Loop over all results until title looks about right
